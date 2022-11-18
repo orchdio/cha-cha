@@ -21,5 +21,5 @@ slackApp.command('/cha', ReplyToSlashCommand);
 
 (async () => {
     await slackApp.start(PORT)
-    console.log('⚡️ Bolt app is running!')
+    console.log(`⚡️ Bolt app is running at ${PORT}!`)
 })();

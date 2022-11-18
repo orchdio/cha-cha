@@ -18,6 +18,18 @@ const platformEmojis = {
     ytmusic: ""
 }
 
+// hacky function (for now), this function sanitizes the platform text labellings
+function sanitizePlatform(text: string) {
+    const platform = _.capitalize(text)
+    if (platform === 'Ytmusic') {
+        return 'YouTube Music'
+    }
+    if (platform === 'Applemusic') {
+        return 'Apple Music'
+    }
+    return platform
+}
+
 async function fetchLinkPreview(link: string) {
     let isShortLink = ['deezer.page.link', 'link.tospotify.com'].some((shortLink) => link.includes(shortLink))
 
@@ -64,7 +76,7 @@ async function convertTrack(text: string, username: string) {
     if (!link) {
         return
     }
-    // convert tracks first
+
     let url = await fetchLinkPreview(link[0]);
     
     // reply to track conversion.
@@ -103,6 +115,7 @@ function BuildTrackConversionBlock(payload: TrackConversion) {
 
     // rest of the track card
     for (const [index, t] of tracks.entries()){
+        const platform = sanitizePlatform(platforms[index])
         scaffold.blocks.push(
             {
                 "type": "divider"
@@ -111,14 +124,14 @@ function BuildTrackConversionBlock(payload: TrackConversion) {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `*${_.capitalize(platforms[index])}*`
+                    "text": `*${platform}*`
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `*<${t.url}|${t.title}>*\n${t.artistes.join(', ')}\n${t.album} ${moment(t.released).isValid() ? '·' + moment(t.released).format('YYYY') : ''}\n${t.duration}`
+                    "text": `*<${t.url}|${t.title}>*\n${t.artistes.join(', ')}\n${t.album} ${moment(t.released).isValid() ? '· ' + moment(t.released).format('YYYY') : ''}\n${t.duration}`
 },
                 "accessory": {
                     "type": "image",
@@ -133,7 +146,7 @@ function BuildTrackConversionBlock(payload: TrackConversion) {
                         "type": "button",
                         "text": {
                             "type": "plain_text",
-                            "text": ":clipboard: Copy link",
+                            "text": `:link: Link on ${platform}`,
                             "emoji": true
                         },
                         "value": `${t.url}`,
@@ -146,7 +159,7 @@ function BuildTrackConversionBlock(payload: TrackConversion) {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": `You can add this track to playlists on your streaming platforms and more at <https://zoove.xyz?u=${payload.data.short_url}|Zoove>. Powered by Orchdio.`
+                    "text": `You can add this track to playlists on your streaming platforms and more <https://zoove.xyz?u=${payload.data.short_url}|here>. Powered by Orchdio.`
                 }
             },
             {
@@ -209,19 +222,5 @@ async function ReplyToSlashCommand({ command, ack, say }) {
         console.log("Error here", err)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export { ReplyToSlashCommand, ReplyToMessage }
