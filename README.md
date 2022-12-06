@@ -4,7 +4,7 @@ Cha-Cha is a slack bot for converting tracks inside slack channels. The bot will
 
 This is very much WIP and the development is as is, features will be deployed as the need for them arises and time goes on. Contributions really welcome.
 
-Powered by [Orchdio APIs](https://orchdio.readme.com).
+Powered by [Orchdio APIs](https://orchdio.readme.io).
 
 ### TODO
 
