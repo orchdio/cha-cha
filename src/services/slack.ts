@@ -151,7 +151,7 @@ function BuildTrackConversionBlock(payload: TrackConversion) {
                         },
                         "value": `${t.url}`,
                         "url": t.url,
-                        "action_id": "button-action"
+                        "action_id": "bxutton-action"
                     }
                 ]
             },
